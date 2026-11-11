@@ -75,6 +75,27 @@
   }
   .note b{color:var(--accent)}
 
+  /* 朗读模块 */
+  .readbar{
+    display:flex; align-items:center; gap:10px; flex-wrap:wrap; background:#fff;
+    border:1px solid var(--line); border-radius:12px; padding:12px 16px; margin:22px 0 26px;
+    font-family:"Microsoft YaHei",system-ui,sans-serif; font-size:13px; color:var(--gray);
+  }
+  .readbar button{border:none; border-radius:999px; padding:8px 18px; font-size:13.5px; cursor:pointer; font-family:inherit; transition:.15s}
+  #readAll{background:var(--accent); color:#fff}
+  #readAll:hover{background:#9c4626}
+  #readStop{background:var(--ink); color:#fff}
+  .readbar select{border:1px solid var(--line); border-radius:8px; padding:5px 8px; font-size:13px; font-family:inherit; background:#fff; color:#4a423b}
+  .passage p{position:relative}
+  .passage p.reading{background:#fdf3ea; border-radius:10px; box-shadow:0 0 0 8px #fdf3ea}
+  .pbtn{
+    position:absolute; right:8px; top:6px; width:30px; height:30px; border-radius:50%;
+    border:1px solid var(--line); background:#fff; color:var(--accent); font-size:11px;
+    cursor:pointer; opacity:0; transition:.18s; font-family:inherit;
+  }
+  .pbtn:hover{border-color:var(--accent)}
+  .passage p:hover .pbtn, .passage p.reading .pbtn{opacity:1}
+
   /* 译文 */
   details{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:0 20px; margin:22px 0}
   details summary{
@@ -144,6 +165,7 @@
 
   @media print{
     .topbar{display:none}
+    .readbar,.pbtn{display:none}
     body{background:#fff}
     .hero-img{box-shadow:none}
     main{padding:10mm 0}
@@ -200,6 +222,19 @@
 
   <h2 id="text"><span class="no">PART 01</span>课文原文</h2>
   <p class="lead">先通读一遍，不查词，只抓大意：作者做汉堡失败了几次？邻居给了他几条规则？</p>
+
+  <div class="readbar">
+    <button id="readAll">▶ 朗读全文</button>
+    <button id="readStop" hidden>■ 停止</button>
+    <label>语速
+      <select id="rate">
+        <option value="0.7">0.7× 慢速跟读</option>
+        <option value="0.9" selected>0.9× 跟读</option>
+        <option value="1.0">1.0× 原速</option>
+      </select>
+    </label>
+    <span>悬停段落右侧出现 ▶，可从任意一段开始读 · 朗读时当前段落自动高亮</span>
+  </div>
 
   <div class="passage">
     <p class="dropcap"><span class="pn">1</span>For years I had been convinced that a good hamburger was simply a matter of good beef. I was wrong, and it took a rainy Sunday afternoon, a patient neighbour and three ruined patties to teach me otherwise.</p>
@@ -460,6 +495,89 @@
     <div style="color:#b3a698">Lingua 精读课 · 220 词系列</div>
   </div>
 </footer>
+
+<script>
+/* ---------- 朗读模块：Web Speech API，优先英音 voice ---------- */
+(function(){
+  const synth = window.speechSynthesis;
+  if(!synth){
+    const bar = document.querySelector('.readbar');
+    if(bar) bar.querySelector('span').textContent = '当前浏览器不支持语音合成，建议使用 Chrome / Edge';
+    return;
+  }
+  const paras = [...document.querySelectorAll('.passage p')];
+  const rateSel = document.getElementById('rate');
+  const btnAll = document.getElementById('readAll');
+  const btnStop = document.getElementById('readStop');
+  let voice = null, token = 0;
+
+  function pickVoice(){
+    const vs = synth.getVoices();
+    voice = vs.find(v=>/en[-_]GB/i.test(v.lang) && /Google|Daniel|Serena|Kate|British/i.test(v.name))
+         || vs.find(v=>/en[-_]GB/i.test(v.lang))
+         || vs.find(v=>/^en/i.test(v.lang)) || null;
+  }
+  pickVoice(); synth.onvoiceschanged = pickVoice;
+
+  function textOf(p){
+    const c = p.cloneNode(true);
+    c.querySelectorAll('.pn,.pbtn').forEach(e=>e.remove());
+    return c.textContent.replace(/\s+/g,' ').trim();
+  }
+  function sentences(t){
+    return t.match(/[^.!?]+[.!?]+["']?|[^.!?]+$/g) || [t];
+  }
+  function highlight(p){
+    document.querySelectorAll('.passage p.reading').forEach(e=>e.classList.remove('reading'));
+    if(p) p.classList.add('reading');
+  }
+  function setUI(on){
+    btnAll.hidden = on; btnStop.hidden = !on;
+  }
+  function speak(text){
+    return new Promise(res=>{
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'en-GB'; if(voice) u.voice = voice;
+      u.rate = parseFloat(rateSel.value);
+      u.onend = res; u.onerror = res;
+      synth.speak(u);
+    });
+  }
+  function stop(){
+    token++; synth.cancel(); highlight(null); setUI(false);
+  }
+  function readFrom(start){
+    stop();
+    token++;
+    const my = token;
+    setUI(true);
+    (async ()=>{
+      for(let i = start; i < paras.length; i++){
+        if(my !== token) return;
+        const p = paras[i];
+        highlight(p);
+        p.scrollIntoView({behavior:'smooth', block:'center'});
+        for(const s of sentences(textOf(p))){
+          if(my !== token) return;
+          await speak(s);
+        }
+        await new Promise(r=>setTimeout(r, 420));
+      }
+      if(my === token){ setUI(false); highlight(null); }
+    })();
+  }
+
+  paras.forEach((p,i)=>{
+    const b = document.createElement('button');
+    b.className = 'pbtn'; b.textContent = '▶'; b.title = '从本段开始朗读';
+    b.addEventListener('click', ()=>readFrom(i));
+    p.appendChild(b);
+  });
+  btnAll.addEventListener('click', ()=>readFrom(0));
+  btnStop.addEventListener('click', stop);
+  window.addEventListener('beforeunload', stop);
+})();
+</script>
 
 </body>
 </html>

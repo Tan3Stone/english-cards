@@ -46,6 +46,26 @@
   .card:hover{transform:translateY(-6px); box-shadow:0 4px 8px rgba(20,22,30,.06), 0 22px 40px -20px rgba(20,22,30,.35)}
   .card img{display:block; width:100%; height:auto}
   .card.hide{display:none}
+  .ctrl{display:flex; flex-wrap:wrap; gap:6px; align-items:center; padding:10px 12px 12px; border-top:1px solid var(--line)}
+  .ctrl .play{
+    border:none; color:#fff; width:30px; height:30px; border-radius:50%; cursor:pointer;
+    font-size:12px; flex:0 0 auto; line-height:1; transition:.15s;
+  }
+  .ctrl .play:hover{filter:brightness(1.1)}
+  .ctrl .play.on{animation:pulse 1s infinite}
+  @keyframes pulse{50%{opacity:.55}}
+  .ctrl .w{
+    font-family:"Segoe UI",system-ui,sans-serif; font-size:13px; padding:4px 11px; border-radius:999px;
+    border:1px solid var(--line); color:#4a4f5a; cursor:pointer; transition:.15s; background:#fff;
+  }
+  .ctrl .w:hover{border-color:#c9ccd4}
+  .ctrl .w.playing{color:#fff}
+  .card[data-g="mono"] .play{background:var(--mono)}  .card[data-g="mono"] .w.playing{background:var(--mono); border-color:var(--mono)}
+  .card[data-g="diph"] .play{background:var(--diph)}  .card[data-g="diph"] .w.playing{background:var(--diph); border-color:var(--diph)}
+  .card[data-g="cons"] .play{background:var(--cons)}  .card[data-g="cons"] .w.playing{background:var(--cons); border-color:var(--cons)}
+  .srcbar{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:0 0 26px; color:var(--gray); font-size:13px}
+  .srcbar select{border:1px solid var(--line); border-radius:8px; padding:6px 10px; font-size:13px; color:#4a4f5a; background:#fff; font-family:inherit}
+  .srcbar b{color:var(--ink); font-weight:600}
   footer{margin-top:56px; padding-top:24px; border-top:1px solid var(--line); color:var(--gray); font-size:13px; line-height:1.9}
   kbd{background:#fff; border:1px solid #dfe1e7; border-bottom-width:2px; border-radius:6px; padding:1px 7px; font-size:12px; font-family:inherit}
   @media (max-width:560px){
@@ -58,7 +78,8 @@
     @page{size:A4 portrait; margin:8mm}
     body{background:#fff}
     .wrap{max-width:none; padding:0}
-    header.top,.toolbar,footer{display:none}
+    header.top,.toolbar,.srcbar,footer{display:none}
+    .ctrl{display:none}
     .grid{grid-template-columns:1fr 1fr; gap:6mm}
     .card{box-shadow:none; border-radius:5mm; page-break-inside:avoid; break-inside:avoid}
     .card.hide{display:none}
@@ -87,6 +108,15 @@
     <button class="btn" onclick="window.print()">打印 / 存为 PDF（A4 每页 6 张）</button>
   </div>
 
+  <div class="srcbar">
+    <span><b>发音</b></span>
+    <select id="src">
+      <option value="human" selected>真人音频优先（词典 API）</option>
+      <option value="tts">英音合成音（RP TTS）</option>
+    </select>
+    <span>点单词发音 · 点 ▶ 连读本卡 4 个例词 · 卡片上的纯音标请对照口型提示跟读</span>
+  </div>
+
   <div class="grid" id="grid"></div>
 
   <footer>
@@ -97,19 +127,43 @@
 </div>
 
 <script>
+/* 数据：[音标, 分组, [4 个例词]]（与卡片 PNG 一一对应） */
 const ITEMS = [
-  ["iː","mono"],["ɪ","mono"],["e","mono"],["æ","mono"],["ɑː","mono"],["ɒ","mono"],
-  ["ɔː","mono"],["ʊ","mono"],["uː","mono"],["ʌ","mono"],["ɜː","mono"],["ə","mono"],
-  ["eɪ","diph"],["aɪ","diph"],["ɔɪ","diph"],["əʊ","diph"],["aʊ","diph"],["ɪə","diph"],["eə","diph"],["ʊə","diph"],
-  ["p","cons"],["b","cons"],["t","cons"],["d","cons"],["k","cons"],["ɡ","cons"],
-  ["f","cons"],["v","cons"],["θ","cons"],["ð","cons"],["s","cons"],["z","cons"],["ʃ","cons"],["ʒ","cons"],["h","cons"],
-  ["m","cons"],["n","cons"],["ŋ","cons"],["l","cons"],["r","cons"],["j","cons"],["w","cons"],["tʃ","cons"],["dʒ","cons"]
+  ["iː","mono",["see","tree","eat","these"]],["ɪ","mono",["sit","ship","big","city"]],
+  ["e","mono",["bed","pen","head","friend"]],["æ","mono",["cat","man","apple","black"]],
+  ["ɑː","mono",["car","father","park","heart"]],["ɒ","mono",["dog","hot","box","coffee"]],
+  ["ɔː","mono",["law","door","talk","four"]],["ʊ","mono",["book","put","good","foot"]],
+  ["uː","mono",["food","moon","blue","school"]],["ʌ","mono",["cup","bus","sun","love"]],
+  ["ɜː","mono",["bird","girl","work","learn"]],["ə","mono",["about","sofa","teacher","banana"]],
+  ["eɪ","diph",["name","day","eight","rain"]],["aɪ","diph",["time","like","night","my"]],
+  ["ɔɪ","diph",["boy","toy","coin","voice"]],["əʊ","diph",["go","home","boat","nose"]],
+  ["aʊ","diph",["now","house","out","down"]],["ɪə","diph",["ear","here","near","year"]],
+  ["eə","diph",["air","hair","care","where"]],["ʊə","diph",["tour","sure","poor","Europe"]],
+  ["p","cons",["pen","park","happy","stop"]],["b","cons",["book","ball","rabbit","job"]],
+  ["t","cons",["tea","time","water","cat"]],["d","cons",["dog","day","body","red"]],
+  ["k","cons",["cat","key","back","cup"]],["ɡ","cons",["go","girl","big","green"]],
+  ["f","cons",["fish","fine","coffee","life"]],["v","cons",["very","love","seven","van"]],
+  ["θ","cons",["think","thank","three","month"]],["ð","cons",["this","that","mother","brother"]],
+  ["s","cons",["sun","see","bus","city"]],["z","cons",["zoo","zero","rose","eyes"]],
+  ["ʃ","cons",["ship","she","fish","nation"]],["ʒ","cons",["measure","vision","pleasure","usual"]],
+  ["h","cons",["hat","hot","hello","happy"]],
+  ["m","cons",["man","make","name","come"]],["n","cons",["no","name","sun","night"]],
+  ["ŋ","cons",["sing","long","thank","English"]],["l","cons",["let","like","small","school"]],
+  ["r","cons",["red","right","rain","run"]],["j","cons",["yes","year","you","young"]],
+  ["w","cons",["we","water","work","window"]],
+  ["tʃ","cons",["chair","church","watch","teacher"]],["dʒ","cons",["jump","age","orange","giant"]]
 ];
+
 const grid = document.getElementById('grid');
-grid.innerHTML = ITEMS.map(([sym,g],i)=>{
+grid.innerHTML = ITEMS.map(([sym,g,ws],i)=>{
   const n = String(i+1).padStart(2,'0');
+  const chips = ws.map(w=>`<span class="w" data-w="${w}">${w}</span>`).join('');
   return `<figure class="card" data-g="${g}" style="margin:0">
     <img src="cards/${n}.png" alt="音标 /${sym}/ 学习卡片" loading="lazy">
+    <div class="ctrl">
+      <button class="play" title="连读本卡例词" aria-label="连读例词">▶</button>
+      ${chips}
+    </div>
   </figure>`;
 }).join('');
 
@@ -123,6 +177,109 @@ document.querySelectorAll('.chip').forEach(btn=>{
     });
   });
 });
+
+/* ---------- 发音模块 ---------- */
+const synth = window.speechSynthesis;
+let gbVoice = null;
+function pickVoice(){
+  const vs = synth ? synth.getVoices() : [];
+  gbVoice = vs.find(v=>/en[-_]GB/i.test(v.lang) && /Google|Daniel|Serena|Kate|British/i.test(v.name))
+         || vs.find(v=>/en[-_]GB/i.test(v.lang))
+         || vs.find(v=>/^en/i.test(v.lang)) || null;
+}
+if(synth){ pickVoice(); synth.onvoiceschanged = pickVoice; }
+
+const audioCache = new Map();   // word -> url | null
+let curAudio = null;
+
+function useHuman(){ return document.getElementById('src').value === 'human'; }
+
+async function humanURL(word){
+  const key = word.toLowerCase();
+  if(audioCache.has(key)) return audioCache.get(key);
+  audioCache.set(key, null);
+  try{
+    const r = await fetch('https://api.dictionaryapi.dev/api/v2/entries/en/' + encodeURIComponent(key));
+    if(r.ok){
+      const j = await r.json();
+      const ph = (j[0] && j[0].phonetics || []).find(p=>p.audio);
+      if(ph){ audioCache.set(key, ph.audio); return ph.audio; }
+    }
+  }catch(e){}
+  return null;
+}
+
+function speak(word, onend){
+  if(!synth){ onend && onend(); return; }
+  synth.cancel();
+  const u = new SpeechSynthesisUtterance(word);
+  u.lang = 'en-GB'; if(gbVoice) u.voice = gbVoice; u.rate = 0.85;
+  u.onend = ()=>{ onend && onend(); };
+  u.onerror = ()=>{ onend && onend(); };
+  synth.speak(u);
+}
+
+function stopAll(){
+  if(synth) synth.cancel();
+  if(curAudio){ curAudio.pause(); curAudio = null; }
+  document.querySelectorAll('.w.playing,.play.on').forEach(e=>e.classList.remove('playing','on'));
+}
+
+async function playWord(word, el){
+  stopAll();
+  el && el.classList.add('playing');
+  if(useHuman()){
+    const url = await humanURL(word);
+    if(url){
+      curAudio = new Audio(url);
+      curAudio.onended = ()=>{ el && el.classList.remove('playing'); };
+      curAudio.onerror = ()=>{ el && el.classList.remove('playing'); speak(word, ()=>el && el.classList.remove('playing')); };
+      curAudio.play();
+      return;
+    }
+  }
+  speak(word, ()=>{ el && el.classList.remove('playing'); });
+}
+
+async function playCard(card){
+  stopAll();
+  const btn = card.querySelector('.play');
+  btn.classList.add('on');
+  const words = [...card.querySelectorAll('.w')];
+  for(const w of words){
+    const chip = w;
+    chip.classList.add('playing');
+    card.scrollIntoView({block:'nearest'});
+    if(useHuman()){
+      const url = await humanURL(chip.dataset.w);
+      if(url){
+        await new Promise(res=>{
+          curAudio = new Audio(url);
+          curAudio.onended = res; curAudio.onerror = res;
+          curAudio.play().catch(res);
+        });
+      }else{
+        await new Promise(res=>speak(chip.dataset.w, res));
+      }
+    }else{
+      await new Promise(res=>speak(chip.dataset.w, res));
+    }
+    chip.classList.remove('playing');
+    await new Promise(r=>setTimeout(r, 350));
+  }
+  btn.classList.remove('on');
+}
+
+grid.addEventListener('click', e=>{
+  const chip = e.target.closest('.w');
+  if(chip){ playWord(chip.dataset.w, chip); return; }
+  const btn = e.target.closest('.play');
+  if(btn){
+    if(btn.classList.contains('on')){ stopAll(); return; }
+    playCard(btn.closest('.card'));
+  }
+});
+window.addEventListener('beforeunload', stopAll);
 </script>
 </body>
 </html>
