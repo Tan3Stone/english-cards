@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>英语学习卡 · 音标 + 精读</title>
+<style>
+  :root{
+    --ink:#241f1b; --gray:#7c7168; --line:#e6ddd2;
+    --paper:#fbf8f3; --accent:#b4552f; --soft:#f5e7dd;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; min-height:100vh; background:var(--paper); color:var(--ink);
+    font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; padding:48px 24px;
+  }
+  .brand{font-family:"Segoe UI",system-ui,sans-serif; font-size:13px; letter-spacing:.24em; text-transform:uppercase; color:var(--accent); font-weight:700}
+  h1{font-family:Georgia,"Times New Roman",serif; font-size:clamp(30px,5vw,48px); margin:14px 0 10px; letter-spacing:-.01em; text-align:center}
+  .sub{color:var(--gray); font-size:15px; margin:0 0 42px; text-align:center; line-height:1.8}
+  .grid{display:grid; grid-template-columns:1fr 1fr; gap:26px; max-width:920px; width:100%}
+  @media(max-width:700px){.grid{grid-template-columns:1fr}}
+  a.tile{
+    display:block; text-decoration:none; color:inherit; background:#fff; border:1px solid var(--line);
+    border-radius:20px; padding:30px 30px 26px; transition:.2s; position:relative; overflow:hidden;
+  }
+  a.tile:hover{transform:translateY(-4px); box-shadow:0 24px 44px -28px rgba(36,31,27,.45)}
+  .tile .k{font-family:"Segoe UI",sans-serif; font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--accent); font-weight:700}
+  .tile h2{font-family:Georgia,serif; font-size:25px; margin:12px 0 8px; font-weight:600}
+  .tile p{color:var(--gray); font-size:13.5px; line-height:1.85; margin:0}
+  .tile .go{position:absolute; right:24px; top:26px; color:var(--accent); font-size:20px; transition:.2s}
+  a.tile:hover .go{transform:translateX(4px)}
+  .tile .strip{height:6px; border-radius:0 0 6px 6px; margin:20px -30px -26px; background:linear-gradient(90deg,var(--accent),#d99a5b)}
+  .tile.blue .strip{background:linear-gradient(90deg,#384c8a,#6b83c4)}
+  .tile.blue .k{color:#384c8a}
+  footer{margin-top:44px; color:#b3a698; font-size:12.5px; text-align:center; line-height:1.9}
+</style>
+</head>
+<body>
+  <div class="brand">Lingua · English Learning Cards</div>
+  <h1>英语学习卡</h1>
+  <p class="sub">44 张国际音标卡 + 图文精读课，可在线浏览，可打印成实体卡片</p>
+
+  <div class="grid">
+    <a class="tile" href="phonetics/">
+      <div class="go">→</div>
+      <div class="k">Phonetics · 44 Cards</div>
+      <h2>英语音标学习卡</h2>
+      <p>12 单元音 · 8 双元音 · 24 辅音<br>每张：大音标 + 口型提示 + 4 个典型例词（含音标与中文）</p>
+      <div class="strip"></div>
+    </a>
+    <a class="tile blue" href="lesson-01/">
+      <div class="go">→</div>
+      <div class="k">Reading · Lesson 01</div>
+      <h2>The Perfect Hamburger</h2>
+      <p>220 词精读课：课文 + 译文 + 词汇 + 语法 + 练习<br>配套 26 张学习卡（课文 6 · 词汇 14 · 句型 6）</p>
+      <div class="strip"></div>
+    </a>
+  </div>
+
+  <footer>英式 RP 为基准，标注美式差异 · 卡片均为 800px 宽 PNG，支持 A4 打印裁剪</footer>
+</body>
+</html>

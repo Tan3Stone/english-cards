@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>英语音标学习卡片 · 44 音素</title>
+<style>
+  :root{
+    --ink:#1d1f26; --gray:#767b86; --line:#eceef3;
+    --mono:#aa5834; --mono-bg:#faf3e8;
+    --diph:#26766a; --diph-bg:#e7f3f0;
+    --cons:#384c8a; --cons-bg:#edf0fa;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:#f7f7f9; color:var(--ink);
+    font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",system-ui,-apple-system,"Segoe UI",sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1240px; margin:0 auto; padding:56px 28px 80px}
+  header.top{display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:24px; margin-bottom:36px}
+  h1{font-size:34px; letter-spacing:-.5px; margin:0 0 10px}
+  .sub{color:var(--gray); font-size:15px; line-height:1.7; margin:0}
+  .stats{display:flex; gap:10px}
+  .stat{background:#fff; border:1px solid var(--line); border-radius:14px; padding:12px 18px; text-align:center; min-width:86px}
+  .stat b{display:block; font-size:22px; line-height:1.2}
+  .stat span{font-size:12px; color:var(--gray)}
+  .toolbar{display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin:0 0 30px}
+  .chip{
+    border:1px solid var(--line); background:#fff; color:#4a4f5a; border-radius:999px;
+    padding:9px 20px; font-size:14px; cursor:pointer; transition:.18s;
+  }
+  .chip:hover{border-color:#d5d8e0}
+  .chip.active{background:var(--ink); border-color:var(--ink); color:#fff}
+  .chip[data-g="mono"].active{background:var(--mono); border-color:var(--mono)}
+  .chip[data-g="diph"].active{background:var(--diph); border-color:var(--diph)}
+  .chip[data-g="cons"].active{background:var(--cons); border-color:var(--cons)}
+  .btn{margin-left:auto; border:1px solid var(--line); background:#fff; border-radius:999px; padding:9px 20px; font-size:14px; cursor:pointer; color:#4a4f5a}
+  .btn:hover{border-color:#c9ccd4}
+  .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(248px,1fr)); gap:26px}
+  .card{
+    background:#fff; border-radius:20px; overflow:hidden;
+    box-shadow:0 1px 2px rgba(20,22,30,.05), 0 10px 26px -18px rgba(20,22,30,.28);
+    transition:transform .22s ease, box-shadow .22s ease;
+  }
+  .card:hover{transform:translateY(-6px); box-shadow:0 4px 8px rgba(20,22,30,.06), 0 22px 40px -20px rgba(20,22,30,.35)}
+  .card img{display:block; width:100%; height:auto}
+  .card.hide{display:none}
+  footer{margin-top:56px; padding-top:24px; border-top:1px solid var(--line); color:var(--gray); font-size:13px; line-height:1.9}
+  kbd{background:#fff; border:1px solid #dfe1e7; border-bottom-width:2px; border-radius:6px; padding:1px 7px; font-size:12px; font-family:inherit}
+  @media (max-width:560px){
+    .wrap{padding:32px 16px 60px}
+    h1{font-size:26px}
+    .grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:16px}
+    .btn{margin-left:0}
+  }
+  @media print{
+    @page{size:A4 portrait; margin:8mm}
+    body{background:#fff}
+    .wrap{max-width:none; padding:0}
+    header.top,.toolbar,footer{display:none}
+    .grid{grid-template-columns:1fr 1fr; gap:6mm}
+    .card{box-shadow:none; border-radius:5mm; page-break-inside:avoid; break-inside:avoid}
+    .card.hide{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>英语音标学习卡片</h1>
+      <p class="sub">44 个国际音标 · 每个音配 4 个典型单词与中文释义 · 附口型与发音要点<br>英式 RP 体系，标注常见美式差异</p>
+    </div>
+    <div class="stats">
+      <div class="stat"><b>44</b><span>音素卡片</span></div>
+      <div class="stat"><b>176</b><span>典型单词</span></div>
+      <div class="stat"><b>4</b><span>周计划</span></div>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <button class="chip active" data-g="all">全部 44</button>
+    <button class="chip" data-g="mono">单元音 12</button>
+    <button class="chip" data-g="diph">双元音 8</button>
+    <button class="chip" data-g="cons">辅音 24</button>
+    <button class="btn" onclick="window.print()">打印 / 存为 PDF（A4 每页 6 张）</button>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <footer>
+    使用建议：每天 2–3 张，先看口型提示跟读，再遮住中文回忆词义，最后做「听音写词」自测。<br>
+    打印：点击右上「打印 / 存为 PDF」，A4 纵向每页自动排 6 张，可直接裁剪成实体卡片。<br>
+    音标体系：英式 RP；/ɒ/、/əʊ/、/ʊə/ 等音的美式读法已在卡片提示中标注。
+  </footer>
+</div>
+
+<script>
+const ITEMS = [
+  ["iː","mono"],["ɪ","mono"],["e","mono"],["æ","mono"],["ɑː","mono"],["ɒ","mono"],
+  ["ɔː","mono"],["ʊ","mono"],["uː","mono"],["ʌ","mono"],["ɜː","mono"],["ə","mono"],
+  ["eɪ","diph"],["aɪ","diph"],["ɔɪ","diph"],["əʊ","diph"],["aʊ","diph"],["ɪə","diph"],["eə","diph"],["ʊə","diph"],
+  ["p","cons"],["b","cons"],["t","cons"],["d","cons"],["k","cons"],["ɡ","cons"],
+  ["f","cons"],["v","cons"],["θ","cons"],["ð","cons"],["s","cons"],["z","cons"],["ʃ","cons"],["ʒ","cons"],["h","cons"],
+  ["m","cons"],["n","cons"],["ŋ","cons"],["l","cons"],["r","cons"],["j","cons"],["w","cons"],["tʃ","cons"],["dʒ","cons"]
+];
+const grid = document.getElementById('grid');
+grid.innerHTML = ITEMS.map(([sym,g],i)=>{
+  const n = String(i+1).padStart(2,'0');
+  return `<figure class="card" data-g="${g}" style="margin:0">
+    <img src="cards/${n}.png" alt="音标 /${sym}/ 学习卡片" loading="lazy">
+  </figure>`;
+}).join('');
+
+document.querySelectorAll('.chip').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.chip').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const g = btn.dataset.g;
+    document.querySelectorAll('.card').forEach(c=>{
+      c.classList.toggle('hide', g!=='all' && c.dataset.g!==g);
+    });
+  });
+});
+</script>
+</body>
+</html>

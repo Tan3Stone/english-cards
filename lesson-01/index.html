@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Perfect Hamburger｜精读课 Lesson 01</title>
+<style>
+  :root{
+    --ink:#241f1b; --body:#3a332d; --gray:#7c7168; --line:#e6ddd2;
+    --paper:#fbf8f3; --card:#fff; --accent:#b4552f; --accent-soft:#f5e7dd;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--paper); color:var(--body);
+    font-family:"Songti SC","Source Han Serif SC",Georgia,"Times New Roman","Microsoft YaHei",serif;
+    -webkit-font-smoothing:antialiased; line-height:1.9;
+  }
+  .topbar{
+    position:sticky; top:0; z-index:20; backdrop-filter:blur(12px);
+    background:rgba(251,248,243,.88); border-bottom:1px solid var(--line);
+  }
+  .topbar-in{max-width:860px; margin:0 auto; padding:12px 24px; display:flex; align-items:center; justify-content:space-between; gap:12px}
+  .brand{font-family:"Segoe UI",system-ui,sans-serif; font-size:14px; letter-spacing:.18em; text-transform:uppercase; color:var(--accent); font-weight:700}
+  .topbar nav{display:flex; gap:18px; font-family:"Microsoft YaHei",system-ui,sans-serif; font-size:13px; color:var(--gray)}
+  .topbar nav a{color:inherit; text-decoration:none; border-bottom:1px solid transparent; padding-bottom:2px}
+  .topbar nav a:hover{color:var(--accent); border-color:var(--accent)}
+  @media(max-width:620px){.topbar nav{display:none}}
+
+  .hero{position:relative; max-width:1000px; margin:0 auto; padding:0 24px}
+  .hero-img{position:relative; border-radius:22px; overflow:hidden; margin-top:26px; box-shadow:0 30px 60px -40px rgba(36,31,27,.6)}
+  .hero-img img{display:block; width:100%; height:min(48vw,430px); object-fit:cover; object-position:center 45%}
+  .hero-img::after{content:""; position:absolute; inset:0; background:linear-gradient(180deg,rgba(20,15,12,.05) 30%,rgba(20,15,12,.72) 100%)}
+  .hero-txt{position:absolute; left:0; right:0; bottom:0; padding:34px 38px; color:#fff}
+  .kicker{font-family:"Segoe UI",system-ui,sans-serif; font-size:12px; letter-spacing:.24em; text-transform:uppercase; opacity:.85}
+  .hero-txt h1{font-family:Georgia,"Times New Roman",serif; font-size:clamp(30px,4.6vw,52px); line-height:1.15; margin:10px 0 12px; font-weight:600; letter-spacing:-.01em}
+  .hero-txt p{margin:0; font-size:15px; opacity:.92; font-family:"Microsoft YaHei",system-ui,sans-serif}
+  .meta{display:flex; flex-wrap:wrap; gap:8px; margin-top:18px}
+  .meta span{
+    font-family:"Microsoft YaHei",system-ui,sans-serif; font-size:12px; padding:5px 12px; border-radius:999px;
+    background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.28); backdrop-filter:blur(4px);
+  }
+  @media(max-width:620px){.hero-img img{height:300px}.hero-txt{padding:22px}.hero-txt h1{font-size:30px}}
+
+  main{max-width:760px; margin:0 auto; padding:44px 24px 96px}
+  h2{
+    font-family:"Microsoft YaHei",system-ui,sans-serif; font-size:21px; letter-spacing:.01em;
+    margin:64px 0 6px; padding-top:8px; color:var(--ink); font-weight:700;
+  }
+  h2 .no{color:var(--accent); font-family:"Segoe UI",sans-serif; font-size:15px; letter-spacing:.1em; display:block; margin-bottom:6px; font-weight:700}
+  h2 + .lead{margin:0 0 22px; color:var(--gray); font-size:14px; font-family:"Microsoft YaHei",system-ui,sans-serif}
+  h3{font-family:"Microsoft YaHei",system-ui,sans-serif; font-size:16px; margin:30px 0 8px; color:var(--ink)}
+  p{margin:0 0 18px; font-size:17px}
+
+  /* 课文 */
+  .passage{font-family:Georgia,"Times New Roman",serif; font-size:17.5px; line-height:2.0; color:#2c2622}
+  .passage p{margin:0 0 20px; text-align:justify; hyphens:auto}
+  .passage .pn{
+    font-family:"Segoe UI",sans-serif; font-size:11px; color:#b9aa9c; vertical-align:super; margin-right:6px; letter-spacing:.1em;
+  }
+  .passage em{font-style:normal; background:linear-gradient(transparent 62%, #f6dfcd 62%); padding:0 1px}
+  .dropcap::first-letter{
+    font-size:58px; line-height:.86; float:left; padding:6px 12px 0 0; color:var(--accent); font-weight:600;
+  }
+  figure{margin:30px 0 34px}
+  figure img{display:block; width:100%; border-radius:14px; box-shadow:0 18px 40px -30px rgba(36,31,27,.55)}
+  figcaption{
+    font-family:"Microsoft YaHei",system-ui,sans-serif; font-size:12.5px; color:var(--gray);
+    margin-top:10px; padding-left:12px; border-left:2px solid var(--accent-soft); line-height:1.7;
+  }
+  .note{
+    background:var(--card); border:1px solid var(--line); border-left:3px solid var(--accent);
+    border-radius:0 12px 12px 0; padding:16px 20px; margin:22px 0;
+    font-family:"Microsoft YaHei",system-ui,sans-serif; font-size:14px; color:#5c534b;
+  }
+  .note b{color:var(--accent)}
+
+  /* 译文 */
+  details{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:0 20px; margin:22px 0}
+  details summary{
+    cursor:pointer; padding:16px 0; font-family:"Microsoft YaHei",system-ui,sans-serif;
+    font-size:14px; color:var(--accent); font-weight:700; list-style:none; display:flex; align-items:center; gap:8px;
+  }
+  details summary::-webkit-details-marker{display:none}
+  details summary::before{content:"▸"; transition:.2s; font-size:12px}
+  details[open] summary::before{transform:rotate(90deg)}
+  details .inner{padding:0 0 18px; font-size:15.5px; color:#4a423b; line-height:1.95; border-top:1px dashed var(--line); padding-top:16px}
+  details .inner p{margin:0 0 14px; font-size:15.5px}
+
+  /* 卡片入口 */
+  .cta{
+    display:flex; align-items:center; justify-content:space-between; gap:18px; flex-wrap:wrap;
+    background:#fff; border:1px solid var(--line); border-radius:16px; padding:20px 24px; margin:30px 0;
+  }
+  .cta-k{font-family:"Segoe UI",sans-serif; font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--accent); margin-bottom:6px}
+  .cta-t{font-family:"Microsoft YaHei",sans-serif; font-size:14px; color:#5c534b}
+  .cta-btn{
+    font-family:"Microsoft YaHei",sans-serif; font-size:14px; text-decoration:none; color:#fff;
+    background:var(--accent); padding:10px 20px; border-radius:999px; white-space:nowrap; transition:.18s;
+  }
+  .cta-btn:hover{background:#9c4626}
+
+  /* 词表 */
+  .vocab{width:100%; border-collapse:collapse; font-family:"Microsoft YaHei",system-ui,sans-serif; font-size:14px; margin:18px 0}
+  .vocab th{
+    text-align:left; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--gray);
+    font-weight:600; padding:10px 12px; border-bottom:1px solid var(--line);
+  }
+  .vocab td{padding:13px 12px; border-bottom:1px solid #f0e9e1; vertical-align:top; line-height:1.7}
+  .vocab tr:hover td{background:#fdfaf6}
+  .vocab .w{font-family:Georgia,serif; font-size:15.5px; color:var(--ink); font-weight:600}
+  .vocab .ipa{font-family:"Segoe UI",serif; color:var(--accent); font-size:13px; display:block; margin-top:2px}
+  .vocab .pos{color:#a99a8c; font-style:italic; font-size:12.5px}
+  .vocab .cn{color:#4a423b}
+  .vocab .eg{color:var(--gray); font-size:13px}
+
+  /* 语法卡 */
+  .gcard{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:20px 22px; margin:16px 0}
+  .gcard .tag{display:inline-block; font-family:"Segoe UI",sans-serif; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); background:var(--accent-soft); padding:3px 10px; border-radius:6px; margin-bottom:10px}
+  .gcard h4{margin:0 0 8px; font-family:"Microsoft YaHei",sans-serif; font-size:15.5px; color:var(--ink)}
+  .gcard .ex{font-family:Georgia,serif; font-size:15.5px; color:#3a332d; background:#fdfaf6; border-radius:8px; padding:10px 14px; margin:10px 0 8px}
+  .gcard .ex i{color:var(--accent); font-style:normal; border-bottom:1px dashed var(--accent)}
+  .gcard p{margin:0; font-family:"Microsoft YaHei",sans-serif; font-size:14px; color:#5c534b; line-height:1.85}
+
+  /* 结构图 */
+  .flow{display:grid; gap:10px; margin:20px 0}
+  .flow .step{display:grid; grid-template-columns:52px 1fr; gap:14px; align-items:start; background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 16px}
+  .flow .n{font-family:"Segoe UI",sans-serif; font-size:12px; letter-spacing:.1em; color:var(--accent); padding-top:3px}
+  .flow .t{font-family:"Microsoft YaHei",sans-serif; font-size:14px; color:#4a423b; line-height:1.8}
+  .flow .t b{color:var(--ink)}
+
+  /* 练习 */
+  .q{font-family:"Microsoft YaHei",sans-serif; font-size:15px; color:#3a332d; margin:0 0 12px; line-height:1.9}
+  .q .num{color:var(--accent); font-family:"Segoe UI",sans-serif; font-size:13px; margin-right:8px}
+  .blank{display:inline-block; min-width:96px; border-bottom:1px solid #c9bcae}
+  details.ans{background:#fffdf9; border-style:dashed; margin:8px 0 0}
+  details.ans summary{font-size:13px; padding:12px 0}
+  details.ans .inner{font-size:14px; padding-top:12px}
+  .quiz-block{margin:26px 0 8px}
+
+  footer{max-width:760px; margin:0 auto; padding:0 24px 80px; color:var(--gray); font-family:"Microsoft YaHei",sans-serif; font-size:13px}
+  .next{border-top:1px solid var(--line); padding-top:22px; display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap}
+  .next b{color:var(--ink)}
+
+  @media print{
+    .topbar{display:none}
+    body{background:#fff}
+    .hero-img{box-shadow:none}
+    main{padding:10mm 0}
+    details{border:none; padding:0}
+    details summary{display:none}
+    details .inner{border:0; padding-top:0}
+    figure{page-break-inside:avoid}
+    h2{page-break-after:avoid}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-in">
+    <div class="brand">Lingua · 精读课</div>
+    <nav>
+      <a href="#text">课文</a>
+      <a href="cards.html">卡片</a>
+      <a href="#vocab">词汇</a>
+      <a href="#grammar">语法</a>
+      <a href="#practice">练习</a>
+      <a href="#task">输出</a>
+    </nav>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-img">
+    <img src="images/web/hero.jpg" alt="刚做好的双层芝士汉堡">
+    <div class="hero-txt">
+      <div class="kicker">Lesson 01 · Reading &amp; Language</div>
+      <h1>The Perfect Hamburger</h1>
+      <p>220 词 · 说明文与叙事结合 · NCE3 风格精读</p>
+      <div class="meta">
+        <span>CEFR B1+ / B2</span>
+        <span>220 words</span>
+        <span>14 个核心词</span>
+        <span>6 个语法点</span>
+        <span>4 项练习</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <h2 id="goals"><span class="no">LESSON GOALS</span>本课目标</h2>
+  <div class="note">
+    <b>①</b> 掌握 14 个与烹饪、口感、火候相关的高频词与语块（patty / lean / moisture / crust…）<br>
+    <b>②</b> 学会 4 个提分句型：<i>however + adj.</i>、<i>the moment</i>、<i>Having done</i>、完全倒装 <i>Then comes…</i><br>
+    <b>③</b> 能按照「步骤 + 原因」的结构，写出 150 词的操作说明，并口头复述 60 秒
+  </div>
+
+  <h2 id="text"><span class="no">PART 01</span>课文原文</h2>
+  <p class="lead">先通读一遍，不查词，只抓大意：作者做汉堡失败了几次？邻居给了他几条规则？</p>
+
+  <div class="passage">
+    <p class="dropcap"><span class="pn">1</span>For years I had been convinced that a good hamburger was simply a matter of good beef. I was wrong, and it took a rainy Sunday afternoon, a patient neighbour and three ruined patties to teach me otherwise.</p>
+
+    <p><span class="pn">2</span>The first rule, my neighbour insisted, is to choose meat with enough fat — roughly one part fat to four parts lean. Lean meat, <em>however</em> expensive, will dry out <em>the moment</em> it touches the pan. <em>Having shaped</em> the mixture into balls, I was told to press them flat with my thumb, leaving a shallow dent in the middle; without it, the centre swells and the burger turns into a ball.</p>
+
+    <p><span class="pn">3</span>Seasoning, too, is done at the last moment. Salt draws out moisture, so meat salted in advance loses the very juice we are trying to keep.</p>
+  </div>
+
+  <figure>
+    <img src="images/web/ingredients.jpg" alt="汉堡食材俯拍：牛肉饼、面包、生菜、番茄、洋葱、芝士">
+    <figcaption>Rule 1｜<b>one part fat to four parts lean</b>　一份脂肪配四份瘦肉——脂肪是"juice"的来源，全瘦的肉一煎就柴。</figcaption>
+  </figure>
+
+  <div class="passage">
+    <p><span class="pn">4</span>Then comes the heat. The pan must be almost smoking before the patty goes in, and the patty must not be moved for three minutes. Every time you turn it, you lose a little of the crust that gives a burger its flavour. Once it is done, let it rest for a minute or two — impatient cooks cut it open at once and watch the juice run away.</p>
+  </div>
+
+  <figure>
+    <img src="images/web/skillet.jpg" alt="铸铁锅中煎制的牛肉饼，表面焦褐，升起轻烟">
+    <figcaption>Rule 4｜<b>Do not move it.</b>　三分钟不动，是为了让美拉德反应形成那层 <b>crust</b>（焦壳）——风味都在这里。</figcaption>
+  </figure>
+
+  <div class="passage">
+    <p><span class="pn">5</span>Finally, the bun: toasted, never cold. Bread, my neighbour observed, is not a container but part of the meal.</p>
+  </div>
+
+  <figure>
+    <img src="images/web/assemble.jpg" alt="双手把烤好的面包盖到汉堡上">
+    <figcaption>Rule 5｜<b>Bread is not a container.</b>　面包要烤过再盖——它不是装东西的盒子，而是这道菜的一部分。</figcaption>
+  </figure>
+
+  <details>
+    <summary>中文译文（建议读完两遍原文后再打开）</summary>
+    <div class="inner">
+      <p>多年来我一直以为，一个好汉堡不过是"牛肉够好"的问题。我错了——是一个下雨的周日下午、一位耐心的邻居，还有三块煎废的肉饼，才让我明白并非如此。</p>
+      <p>邻居坚持说，第一条规则是选脂肪足够的肉——大致一份脂肪配四份瘦肉。瘦肉无论多贵，一碰锅就会变柴。把肉馅团成球之后，他让我用拇指把它们压扁，在中间留一个浅坑；没有这个坑，中心会鼓起来，汉堡就变成一个球了。</p>
+      <p>调味也要放在最后一刻。盐会逼出水分，所以提前腌过的肉，恰恰丢掉了我们想留住的那点肉汁。</p>
+      <p>接下来是火候。肉饼下锅前，锅必须热到几乎冒烟；下锅后三分钟内不能动它。每翻一次面，你都会损失一点赋予汉堡风味的焦壳。煎好之后，让它静置一两分钟——性急的厨师立刻切开，只能眼看着肉汁流走。</p>
+      <p>最后是面包：要烤过，绝不能是凉的。邻居说得好：面包不是容器，而是这顿饭的一部分。</p>
+    </div>
+  </details>
+
+  <div class="cta">
+    <div>
+      <div class="cta-k">配套卡片 · 26 张</div>
+      <div class="cta-t">课文 6 张（分段落精读）+ 词汇 14 张 + 句型 6 张</div>
+    </div>
+    <a class="cta-btn" href="cards.html">打开卡片 →</a>
+  </div>
+
+  <h2 id="vocab"><span class="no">PART 02</span>核心词汇与语块</h2>
+  <p class="lead">先记"搭配"而不是单个词：能直接说出口的，才是你的词。</p>
+
+  <table class="vocab">
+    <thead>
+      <tr><th style="width:34%">词 / 语块</th><th style="width:16%">词性</th><th>释义与用法</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="w">patty</span><span class="ipa">/ˈpæti/</span></td>
+        <td><span class="pos">n.</span></td>
+        <td class="cn">（压成圆形的）肉饼<br><span class="eg">three ruined patties 三块煎废的肉饼</span></td>
+      </tr>
+      <tr>
+        <td><span class="w">lean</span><span class="ipa">/liːn/</span></td>
+        <td><span class="pos">adj.</span></td>
+        <td class="cn">瘦的（肉）；精瘦的。反义 <b>fatty</b> / <b>rich</b><br><span class="eg">lean meat dries out quickly. 瘦肉很容易变柴。</span></td>
+      </tr>
+      <tr>
+        <td><span class="w">dry out</span><span class="ipa">/draɪ aʊt/</span></td>
+        <td><span class="pos">phr. v.</span></td>
+        <td class="cn">（完全）变干、变柴<br><span class="eg">The chicken will dry out if you overcook it.</span></td>
+      </tr>
+      <tr>
+        <td><span class="w">dent</span><span class="ipa">/dent/</span></td>
+        <td><span class="pos">n. / v.</span></td>
+        <td class="cn">凹坑；使凹陷<br><span class="eg">a shallow dent in the middle 中间一个浅坑</span></td>
+      </tr>
+      <tr>
+        <td><span class="w">swell</span><span class="ipa">/swel/</span></td>
+        <td><span class="pos">v.</span></td>
+        <td class="cn">膨胀、鼓起（swell–swelled–swollen）<br><span class="eg">The centre swells as it cooks.</span></td>
+      </tr>
+      <tr>
+        <td><span class="w">seasoning</span><span class="ipa">/ˈsiːzənɪŋ/</span></td>
+        <td><span class="pos">n.</span></td>
+        <td class="cn">调味（品）；动词 <b>season</b> 调味<br><span class="eg">Season it just before cooking.</span></td>
+      </tr>
+      <tr>
+        <td><span class="w">moisture</span><span class="ipa">/ˈmɔɪstʃə/</span></td>
+        <td><span class="pos">n.</span></td>
+        <td class="cn">水分、湿气（不可数）<br><span class="eg">Salt draws out moisture. 盐会逼出水分。</span></td>
+      </tr>
+      <tr>
+        <td><span class="w">in advance</span><span class="ipa">/ɪn ədˈvɑːns/</span></td>
+        <td><span class="pos">phr.</span></td>
+        <td class="cn">提前、事先<br><span class="eg">salted in advance 提前腌过</span></td>
+      </tr>
+      <tr>
+        <td><span class="w">crust</span><span class="ipa">/krʌst/</span></td>
+        <td><span class="pos">n.</span></td>
+        <td class="cn">（煎烤形成的）焦壳、外皮<br><span class="eg">a golden crust 金黄的焦壳</span></td>
+      </tr>
+      <tr>
+        <td><span class="w">flavour</span><span class="ipa">/ˈfleɪvə/</span></td>
+        <td><span class="pos">n.</span></td>
+        <td class="cn">风味、味道（英式拼写；美式 <b>flavor</b>）<br><span class="eg">give it its flavour 赋予它风味</span></td>
+      </tr>
+      <tr>
+        <td><span class="w">let it rest</span><span class="ipa">/let ɪt rest/</span></td>
+        <td><span class="pos">phr.</span></td>
+        <td class="cn">静置（让肉汁回吸）<br><span class="eg">Let the steak rest for five minutes.</span></td>
+      </tr>
+      <tr>
+        <td><span class="w">at once</span><span class="ipa">/ət wʌns/</span></td>
+        <td><span class="pos">phr.</span></td>
+        <td class="cn">立刻；同时（注意双义）<br><span class="eg">He cut it open at once. 他立刻切开了。</span></td>
+      </tr>
+      <tr>
+        <td><span class="w">toasted</span><span class="ipa">/ˈtəʊstɪd/</span></td>
+        <td><span class="pos">adj.</span></td>
+        <td class="cn">烤过的；动词 <b>toast</b><br><span class="eg">a toasted bun 烤过的面包</span></td>
+      </tr>
+      <tr>
+        <td><span class="w">a matter of</span><span class="ipa">/ə ˈmætər əv/</span></td>
+        <td><span class="pos">phr.</span></td>
+        <td class="cn">……的问题；取决于<br><span class="eg">It's simply a matter of practice. 只是练不练的问题。</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 id="grammar"><span class="no">PART 03</span>语法与句型精讲</h2>
+  <p class="lead">这 6 个结构，是本篇最值得"搬走"的东西。</p>
+
+  <div class="gcard">
+    <span class="tag">01 时态</span>
+    <h4>过去完成时：为"后来才发现"埋伏笔</h4>
+    <div class="ex">For years I <i>had been convinced</i> that a good hamburger was simply a matter of good beef. I was wrong…</div>
+    <p><b>had been convinced</b> 表示"在我发现自己错之前，我一直这么认为"——过去的过去。写经历类作文时，用它交代背景，再转折，句子立刻有层次。</p>
+  </div>
+
+  <div class="gcard">
+    <span class="tag">02 句型</span>
+    <h4>it took sb + 时间/代价 + to do sth</h4>
+    <div class="ex">It <i>took</i> a rainy Sunday afternoon, a patient neighbour and three ruined patties <i>to teach</i> me otherwise.</div>
+    <p>it 是形式主语，真正的主语是后面的不定式。<b>otherwise</b> 意为"并非如此"，比 not 更书面。仿写：<br>It took me three failures to learn that lesson.</p>
+  </div>
+
+  <div class="gcard">
+    <span class="tag">03 让步</span>
+    <h4>however + adj. = no matter how + adj.</h4>
+    <div class="ex">Lean meat, <i>however</i> expensive, will dry out…</div>
+    <p>however 引导让步状语时，后面紧跟形容词/副词，且常省略主语和 be：however expensive (it is)。注意与"然而"的 however 区分——这里它不在句首。</p>
+  </div>
+
+  <div class="gcard">
+    <span class="tag">04 连词</span>
+    <h4>the moment / every time 充当连词</h4>
+    <div class="ex">…will dry out <i>the moment</i> it touches the pan.<br><i>Every time</i> you turn it, you lose a little of the crust…</div>
+    <p>名词短语直接作连词，等于 as soon as / whenever，口语和书面都高频。同类：the minute, the first time, next time。</p>
+  </div>
+
+  <div class="gcard">
+    <span class="tag">05 非谓语</span>
+    <h4>Having done：先做的事，放在句首</h4>
+    <div class="ex"><i>Having shaped</i> the mixture into balls, I was told to press them flat…</div>
+    <p>完成式分词作状语，强调"塑形"发生在"压扁"之前，逻辑主语是 I（与主句主语一致）。后面 <b>leaving a shallow dent</b> 是现在分词作结果状语。</p>
+  </div>
+
+  <div class="gcard">
+    <span class="tag">06 倒装 / 对比</span>
+    <h4>Then comes… ／ not A but B</h4>
+    <div class="ex"><i>Then comes</i> the heat.<br>Bread, my neighbour observed, is <i>not a container but</i> part of the meal.</div>
+    <p>方位/时间副词置于句首且主语在后时，用完全倒装（Then came the moment…）。<b>not A but B</b> 用于纠正认知，写作结尾金句很好用。</p>
+  </div>
+
+  <h2><span class="no">PART 04</span>篇章结构：这类文章怎么搭</h2>
+  <div class="flow">
+    <div class="step"><div class="n">¶1</div><div class="t"><b>钩子：先立一个错误认知</b><br>"good beef 就够了"——错误认知 + 代价（三次失败），读者立刻想知道正确答案。</div></div>
+    <div class="step"><div class="n">¶2–3</div><div class="t"><b>规则 + 原因</b><br>选肉、塑形、调味。每条都是"怎么做 + 为什么"，<b>原因句</b>是这类说明文的灵魂。</div></div>
+    <div class="step"><div class="n">¶4</div><div class="t"><b>核心动作，写成短句</b><br>The pan must be almost smoking… must not be moved… 短句 + 情态动词，节奏感强。</div></div>
+    <div class="step"><div class="n">¶5</div><div class="t"><b>收尾金句，把细节升华</b><br>Bread is not a container but part of the meal. 从"操作"跳到"观念"。</div></div>
+  </div>
+  <p class="lead" style="margin-top:18px">写作可套用：<b>误解 → 3–4 条规则（每条带原因）→ 一句观念性总结</b>。</p>
+
+  <h2 id="practice"><span class="no">PART 05</span>理解与语言练习</h2>
+
+  <div class="quiz-block">
+    <h3>A. 判断正误（True / False）</h3>
+    <p class="q"><span class="num">1.</span>The writer once believed that good beef alone makes a good hamburger.</p>
+    <p class="q"><span class="num">2.</span>Lean meat is a better choice because it has more flavour.</p>
+    <p class="q"><span class="num">3.</span>The dent in the middle keeps the patty from turning into a ball.</p>
+    <p class="q"><span class="num">4.</span>Salting the meat early helps it stay juicy.</p>
+    <p class="q"><span class="num">5.</span>The patty should be turned often so that it cooks evenly.</p>
+    <details class="ans">
+      <summary>查看答案</summary>
+      <div class="inner">1. T　2. F（瘦肉会 dry out，需要脂肪）　3. T　4. F（盐会 draw out moisture）　5. F（three minutes 不能动，频繁翻面会失去 crust）</div>
+    </details>
+  </div>
+
+  <div class="quiz-block">
+    <h3>B. 选词填空</h3>
+    <p class="q" style="font-size:13.5px;color:#8b7f74">however / the moment / in advance / rest / a matter of</p>
+    <p class="q"><span class="num">1.</span>Great coffee is largely <span class="blank"></span> fresh beans and clean water.</p>
+    <p class="q"><span class="num">2.</span><span class="blank"></span> expensive the restaurant is, the food here tastes better.</p>
+    <p class="q"><span class="num">3.</span>Call me <span class="blank"></span> you land — I'll pick you up.</p>
+    <p class="q"><span class="num">4.</span>Book your tickets <span class="blank"></span>; the show always sells out.</p>
+    <p class="q"><span class="num">5.</span>Let the dough <span class="blank"></span> for an hour before baking.</p>
+    <details class="ans">
+      <summary>查看答案</summary>
+      <div class="inner">1. a matter of　2. However（句首 + 形容词，注意大写）　3. the moment　4. in advance　5. rest</div>
+    </details>
+  </div>
+
+  <div class="quiz-block">
+    <h3>C. 中译英（用上括号里的结构）</h3>
+    <p class="q"><span class="num">1.</span>我花了三个小时才把这道菜做好。（it took…）</p>
+    <p class="q"><span class="num">2.</span>无论多贵，这台机器都值得买。（however + adj.）</p>
+    <p class="q"><span class="num">3.</span>把面团揉好之后，我把它放在温暖的地方。（Having done）</p>
+    <p class="q"><span class="num">4.</span>接下来是最后一步：把酱汁淋在上面。（完全倒装）</p>
+    <details class="ans">
+      <summary>查看参考答案</summary>
+      <div class="inner">
+        1. It took me three hours to get the dish right.<br>
+        2. However expensive it is, the machine is worth buying.<br>
+        3. Having kneaded the dough, I left it in a warm place.<br>
+        4. Then comes the last step: pour the sauce over it.
+      </div>
+    </details>
+  </div>
+
+  <h2 id="task"><span class="no">PART 06</span>输出任务</h2>
+
+  <div class="gcard">
+    <span class="tag">Writing</span>
+    <h4>150–180 词：How to make ______</h4>
+    <p>任选其一：手冲咖啡 / 番茄炒蛋 / 你家乡的一道小吃。要求：<br>
+    ① 开头先写一个常见误解；② 至少 3 条"步骤 + 原因"；③ 用上 <i>however</i>、<i>the moment</i>、<i>Having done</i> 各一次；④ 结尾写一句观念性金句。</p>
+  </div>
+
+  <div class="gcard">
+    <span class="tag">Speaking</span>
+    <h4>60 秒复述：不看原文，讲清 4 条规则</h4>
+    <p>用连接词串起来：<i>First… The key is… The moment you… Once it's done… Finally…</i><br>
+    录音后自查三点：规则说全了吗？每条给出原因了吗？有没有用上 however / the moment？</p>
+  </div>
+
+  <div class="note" style="margin-top:34px">
+    <b>朗读提示</b>　慢读三遍，注意：<i>must not be moved</i> 中 not 重读；<i>three minutes</i> 连读 /θriː ˈmɪnɪts/；<i>a matter of</i> 弱读为 /ə ˈmætər əv/，of 几乎吞掉。
+  </div>
+
+</main>
+
+<footer>
+  <div class="next">
+    <div><b>下一课预告</b>　Lesson 02 · Why We Burn Toast — 焦糊与风味的化学反应（因果说明文）</div>
+    <div style="color:#b3a698">Lingua 精读课 · 220 词系列</div>
+  </div>
+</footer>
+
+</body>
+</html>

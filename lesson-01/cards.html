@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 01 配套卡片｜词汇 14 + 句型 6</title>
+<style>
+  :root{--ink:#241f1b;--gray:#7c7168;--line:#e6ddd2;--paper:#fbf8f3;--accent:#b4552f}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1180px;margin:0 auto;padding:48px 26px 90px}
+  .back{font-size:13px;color:var(--gray);text-decoration:none;border-bottom:1px solid var(--line)}
+  .back:hover{color:var(--accent);border-color:var(--accent)}
+  h1{font-family:Georgia,"Times New Roman",serif;font-size:32px;margin:22px 0 8px;letter-spacing:-.01em}
+  .sub{color:var(--gray);font-size:14px;line-height:1.8;margin:0 0 28px}
+  .bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:26px}
+  .chip{border:1px solid var(--line);background:#fff;color:#4a423b;border-radius:999px;padding:8px 18px;font-size:13.5px;cursor:pointer;transition:.18s;font-family:inherit}
+  .chip.active{background:var(--ink);border-color:var(--ink);color:#fff}
+  .chip:hover{border-color:#cbbbac}
+  .btn{margin-left:auto;border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 18px;font-size:13.5px;cursor:pointer;color:#4a423b;font-family:inherit}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(236px,1fr));gap:24px}
+  .card{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 1px 2px rgba(36,31,27,.05),0 12px 28px -20px rgba(36,31,27,.4);transition:transform .2s,box-shadow .2s;margin:0}
+  .card:hover{transform:translateY(-5px);box-shadow:0 4px 8px rgba(36,31,27,.06),0 24px 40px -22px rgba(36,31,27,.45)}
+  .card img{display:block;width:100%}
+  .card.hide{display:none}
+  footer{margin-top:54px;padding-top:22px;border-top:1px solid var(--line);color:var(--gray);font-size:13px;line-height:1.9}
+  @media(max-width:560px){.wrap{padding:30px 16px 60px}h1{font-size:24px}.grid{grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px}.btn{margin-left:0}}
+  @media print{
+    @page{size:A4 portrait;margin:8mm}
+    body{background:#fff}.wrap{max-width:none;padding:0}
+    .back,h1,.sub,.bar,footer{display:none}
+    .grid{grid-template-columns:1fr 1fr;gap:6mm}
+    .card{box-shadow:none;break-inside:avoid;border-radius:4mm}
+    .card.hide{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="index.html">← 返回课文</a>
+  <h1>Lesson 01 · 配套学习卡片</h1>
+  <p class="sub">课文 6 张（标题卡 + 5 段精读）+ 词汇 14 张 + 句型 6 张，共 26 张，与课文一一对应。<br>屏幕上是闪卡，打印出来是能裁剪的实体卡（A4 每页 6 张）。</p>
+
+  <div class="bar">
+    <button class="chip active" data-g="all">全部 26</button>
+    <button class="chip" data-g="text">课文 6</button>
+    <button class="chip" data-g="vocab">词汇 14</button>
+    <button class="chip" data-g="pattern">句型 6</button>
+    <button class="btn" onclick="window.print()">打印 / 存为 PDF</button>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <footer>
+    用法建议：① 看正面读词 → 立刻说出中文与例句；② 遮住例句，用词造句；③ 把 6 张句型卡单独抽出，写作前快速过一遍。<br>
+    卡片与课文共用一套术语与例句，复习时不必来回切换。
+  </footer>
+</div>
+
+<script>
+const V = [["patty","肉饼"],["lean","瘦的"],["dry out","变干"],["dent","凹坑"],["swell","膨胀"],["seasoning","调味品"],
+           ["moisture","水分"],["in advance","提前"],["crust","焦壳"],["flavour","风味"],["let it rest","静置"],
+           ["at once","立刻"],["toasted","烤过的"],["a matter of","是……的问题"]];
+const P = ["过去完成时","it took sb…to do","however + adj.","the moment 作连词","Having done 分词状语","倒装 / not…but"];
+
+const T = ["标题卡 · 本课信息","¶1 误解与代价","¶2 规则一 · 选肉与塑形","¶3 规则二 · 调味时机","¶4 规则三 · 火候与静置","¶5 规则四 · 面包"];
+const cards = [
+  ...T.map((w,i)=>({g:"text",src:`cards/text_${String(i+1).padStart(2,'0')}.png`,alt:w})),
+  ...V.map(([w,cn],i)=>({g:"vocab",src:`cards/vocab_${String(i+1).padStart(2,'0')}.png`,alt:`${w}（${cn}）`})),
+  ...P.map((w,i)=>({g:"pattern",src:`cards/pattern_${String(i+1).padStart(2,'0')}.png`,alt:w}))
+];
+document.getElementById('grid').innerHTML = cards.map(c=>
+  `<figure class="card" data-g="${c.g}"><img src="${c.src}" alt="${c.alt}" loading="lazy"></figure>`).join('');
+
+document.querySelectorAll('.chip').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.chip').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const g=btn.dataset.g;
+    document.querySelectorAll('.card').forEach(c=>c.classList.toggle('hide', g!=='all' && c.dataset.g!==g));
+  });
+});
+</script>
+</body>
+</html>
